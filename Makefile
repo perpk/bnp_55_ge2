@@ -1,6 +1,8 @@
-run: venv/bin/activate
+infra:
 	docker-compose up -d
-	./venv/bin/python3 sample/__main__.py
+
+run: venv/bin/activate
+	./venv/bin/python3 sample/main-script.py
 
 setup: requirements.txt
 	pip install -r requirements.txt
