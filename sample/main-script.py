@@ -1,6 +1,8 @@
 import mysql.connector as mysql
+from user_action import UserAction
 
 bioinf = mysql.connect(host="localhost", user="root", passwd="test123", db="bioinf")
+bioinf.autocommit = True
 bioinfcur = bioinf.cursor()
 
 # A. Create a table for hosting sequences
@@ -22,7 +24,7 @@ bioinfcur.execute(sql_create_table_bioseq)
 
 command = ""
 
-while "Exit" != command.lower():
+while "exit" != command.lower():
     print("""
     What action would you like to execute?
     
@@ -37,7 +39,11 @@ while "Exit" != command.lower():
         print("Terminating...")
         break
 
+    userAction = UserAction(bioinfcur)
 
-
-
+    try:
+        userAction.execute_action(command)
+    except ValueError as ve:
+        print(ve)
+        continue
 
