@@ -24,7 +24,7 @@ bioinfcur.execute(sql_create_table_bioseq)
 
 command = ""
 
-while "exit" != command.lower():
+while "exit" != command.lower() or command == '4':
     print("""
     What action would you like to execute?
     
@@ -35,7 +35,7 @@ while "exit" != command.lower():
     """)
 
     command = input("Please enter the action... ")
-    if command.lower() == "exit":
+    if command.lower() == "exit" or command == '4':
         print("Terminating...")
         break
 

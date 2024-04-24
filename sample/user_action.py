@@ -18,9 +18,7 @@ class UserAction:
         self.dbcursor = dbcursor
 
     def _create_new_entry(self):
-        errors = False
-
-        while not errors:
+        while True:
             print("""
             Please provide the attributes of the sequence record to create
             """)
@@ -40,21 +38,47 @@ class UserAction:
                 self.dbcursor.execute(select_last_sql, (entry_row_id,))
                 result = self.dbcursor.fetchone()
 
-                print(f"Record successfully created with id={result[0]}, seq={result[1]} and seq_type={result[2]} by {result[3]}.")
+                print(
+                    f"Record successfully created with id={result[0]}, seq={result[1]} and seq_type={result[2]} by {result[3]}.")
 
-                user_input = input("Hit <Enter> if you want to create another entry or type Exit to leave to the main menu...")
+                user_input = input(
+                    "Hit <Enter> if you want to create another entry or type Exit to leave to the main menu...")
                 if user_input.lower() == "exit":
                     break
 
             except ValueError as exc:
                 print(exc)
-                errors = True
-                exit = input("Please hit enter to try again or type 'exit' to leave... ")
-                if (exit.lower() == "exit"):
+                exitCmd = input("Please hit enter to try again or type 'exit' to leave... ")
+                if exitCmd.lower() == "exit":
                     break
 
     def _delete_existing_entry(self):
-        pass
+        while True:
+            print("""
+            These are the entries currently available in the Database
+            """)
+            select_all_sql = "SELECT ID, SEQ_TYPE, SEQ, CREATOR FROM BIOSEQ"
+            self.dbcursor.execute(select_all_sql)
+            results = self.dbcursor.fetchall()
+            available_ids = []
+            for result in results:
+                print(f"id='{result[0]}'.....'{result[2]}'")
+                available_ids.append(result[0])
+
+            user_entry_to_delete = input("Please provide the ID of the entry you want to delete... ")
+            while not user_entry_to_delete.isnumeric() or int(user_entry_to_delete) not in available_ids:
+                user_entry_to_delete = input(
+                    f"The provided input {user_entry_to_delete} is not valid because its either not numeric or not "
+                    f"available, please provide a numeric one or type 'Exit' to leave...")
+                if user_entry_to_delete.lower() == "exit":
+                    return
+            delete_entry_sql = "DELETE FROM BIOSEQ WHERE ID=%s"
+            self.dbcursor.execute(delete_entry_sql, (user_entry_to_delete,))
+            print(f"Entry with ID={user_entry_to_delete} is now deleted")
+            user_input = input(
+                "Hit <Enter> if you want to delete another entry or type Exit to leave to the main menu...")
+            if user_input.lower() == "exit":
+                break
 
     def _print_existing_entry(self):
         pass
