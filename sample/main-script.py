@@ -24,6 +24,7 @@ bioinfcur.execute(sql_create_table_bioseq)
 
 command = ""
 
+# Γ. Command Line Application to Create, Delete or Print an entry.
 while "exit" != command.lower() or command == '4':
     print("""
     What action would you like to execute?
