@@ -81,7 +81,33 @@ class UserAction:
                 break
 
     def _print_existing_entry(self):
-        pass
+        while True:
+            select_all_sql = "SELECT SEQ, SEQ_TYPE, CREATOR, ID FROM BIOSEQ"
+            self.dbcursor.execute(select_all_sql)
+            results = self.dbcursor.fetchall()
+            bio_seq_list = []
+            for result in results:
+                bio_seq_cur = BioSeq(result[0], result[1], result[2], result[3])
+                bio_seq_list.append(bio_seq_cur)
+            available_ids = [s.ident for s in bio_seq_list]
+            print(f"""
+            Currently the following entries are available in the database:
+            {[e for e in available_ids]}
+            """)
+            user_entry_to_print = input("Please provide the ID of the entry you want to print... ")
+            while not user_entry_to_print.isnumeric() or int(user_entry_to_print) not in available_ids:
+                user_entry_to_delete = input(
+                    f"The provided input {user_entry_to_print} is not valid because its either not numeric or not "
+                    f"available, please provide a numeric one or type 'Exit' to leave...")
+                if user_entry_to_delete.lower() == "exit":
+                    return
+            bio_seq_to_print_f = filter(lambda b: b.ident == int(user_entry_to_print), bio_seq_list)
+            bio_seq_to_print = list(bio_seq_to_print_f)[0]
+            bio_seq_to_print.print_info()
+            user_input = input(
+                "Hit <Enter> if you want to print another entry or type Exit to leave to the main menu...")
+            if user_input.lower() == "exit":
+                break
 
     def execute_action(self, user_input):
         sanitized_user_input = _validate_input(user_input)

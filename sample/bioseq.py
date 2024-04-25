@@ -4,8 +4,10 @@ import re
 def has_thymine_content(seq):
     return re.search('T', seq) != None
 
+
 def has_uracil_content(seq):
     return re.search('U', seq) != None
+
 
 def validate_only_valid_bases(seq):
     seq_list = [char for char in seq]
@@ -29,8 +31,16 @@ class BioSeq:
         self.seq_type = seq_type
         self.creator = creator
 
+    def __init__(self, seq, seq_type, creator, ident):
+        self.seq = seq
+        self.seq_type = seq_type
+        self.creator = creator
+        self.ident = ident
+
     ## ii. A print Method to display all fields with their respective values when called
     def print_info(self):
+        if self.ident:
+            print(f"___ID={self.ident}___")
         print(f"""
         sequence = {self.seq}
         sequence type = {self.seq_type}
@@ -50,6 +60,3 @@ class BioSeq:
             raise ValueError("Thymine is not a valid base in an RNA-Sequence")
         if self.seq_type == "DNA" and has_uracil_content(self.seq):
             raise ValueError("Uracil is not a valid base in a DNA-Sequence")
-
-
-

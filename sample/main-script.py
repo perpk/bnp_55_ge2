@@ -35,7 +35,7 @@ while "exit" != command.lower() or command == '4':
     4........Exit
     """)
 
-    command = input("Please enter the action... ")
+    command = input("Please enter an action... ")
     if command.lower() == "exit" or command == '4':
         print("Terminating...")
         break
