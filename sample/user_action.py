@@ -17,6 +17,15 @@ class UserAction:
     def __init__(self, dbcursor):
         self.dbcursor = dbcursor
 
+    def execute_action(self, user_input):
+        sanitized_user_input = _validate_input(user_input)
+        if sanitized_user_input == 1:
+            self._create_new_entry()
+        elif sanitized_user_input == 2:
+            self._delete_existing_entry()
+        elif sanitized_user_input == 3:
+            self._print_existing_entry()
+
     def _create_new_entry(self):
         while True:
             print("""
@@ -108,12 +117,3 @@ class UserAction:
                 "Hit <Enter> if you want to print another entry or type Exit to leave to the main menu...")
             if user_input.lower() == "exit":
                 break
-
-    def execute_action(self, user_input):
-        sanitized_user_input = _validate_input(user_input)
-        if sanitized_user_input == 1:
-            self._create_new_entry()
-        elif sanitized_user_input == 2:
-            self._delete_existing_entry()
-        elif sanitized_user_input == 3:
-            self._print_existing_entry()
